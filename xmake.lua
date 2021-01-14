@@ -17,9 +17,9 @@ set_languages("cxx17")
 target("Core")
     set_kind("static")
     
-    add_includedirs("Core/include")
-    add_headerfiles("Core/include/**.hpp", "Core/include/**.inl")
-    add_files("Core/src/**.cpp")
+    add_includedirs("include/Core")
+    add_headerfiles("include/Core/**.hpp", "include/Core/**.inl")
+    add_files("src/Core/**.cpp")
     
 --
 --  Graphics Library
@@ -29,9 +29,9 @@ target("Graphics")
     
     add_deps("Core")
     
-    add_includedirs("Graphics/include")
-    add_headerfiles("Graphics/include/**.hpp", "Graphics/include/**.inl")
-    add_files("Graphics/src/**.cpp")
+    add_includedirs("include/Graphics")
+    add_headerfiles("include/Graphics/**.hpp", "include/Graphics/**.inl")
+    add_files("src/Graphics/**.cpp")
 
 --
 --  Engine testing implementation
@@ -41,8 +41,8 @@ target("Testing")
     
     add_deps("Core", "Graphics")
     
-    add_includedirs("Testing/include")
-    add_headerfiles("Testing/include/**.hpp", "Testing/include/**.inl")
-    add_files("Testing/src/**.cpp")
+    add_includedirs("include/Testing")
+    add_headerfiles("include/Testing/**.hpp", "include/Testing/**.inl")
+    add_files("src/Testing/**.cpp")
 
 target_end()
