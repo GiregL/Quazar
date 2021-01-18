@@ -6,7 +6,10 @@
 #define QUAZAR_APPLICATION_HPP
 
 #include <memory>
+#include <vector>
 #include "Window.hpp"
+#include "EventType.hpp"
+#include "EventHandler.hpp"
 
 namespace quazar::core
 {
@@ -19,13 +22,20 @@ namespace quazar::core
         void Init();
         void Run();
 
+        void AddEventHandler(EventHandler&& handler) noexcept;
+        void AddEventHandler(EventType type, Handler handler) noexcept;
+
         ~Application();
 
+        void SetRunning(bool run) noexcept;
+
         Window& GetWindow() noexcept;
+        bool IsRunning() const noexcept;
 
     private:
         Window m_main_window;
-
+        bool m_is_running;
+        std::vector<EventHandler> m_event_handlers;
     };
 }
 

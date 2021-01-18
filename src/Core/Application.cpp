@@ -2,16 +2,22 @@
 // Created by lezenn on 18/01/2021.
 //
 
-#include "Application.hpp"
 #include <SDL2/SDL.h>
 #include <stdexcept>
+#include <utility>
+
+#include "Application.hpp"
 #include "Logger.hpp"
+#include "EventType.hpp"
+
 
 namespace quazar::core
 {
 
     Application::Application(const std::string& name, int width, int height) noexcept
         : m_main_window {name, width, height}
+        , m_is_running {true}
+        , m_event_handlers {}
     {
     }
 
@@ -29,10 +35,17 @@ namespace quazar::core
 
     void Application::Run()
     {
-        auto screenSurface = m_main_window.GetSurface();
-        SDL_FillRect(screenSurface, nullptr, SDL_MapRGB(screenSurface->format, 0xff, 0xff, 0xff));
-        m_main_window.UpdateSurface();
-        SDL_Delay(2000);
+        SDL_Event event;
+        while (m_is_running)
+        {
+            while (SDL_PollEvent(&event))
+            {
+                for (auto& handler : m_event_handlers)
+                {
+                    handler.Run(FromSDLEventType(event.type), *this);
+                }
+            }
+        }
     }
 
     Application::~Application()
@@ -43,5 +56,25 @@ namespace quazar::core
     Window &Application::GetWindow() noexcept
     {
         return m_main_window;
+    }
+
+    void Application::AddEventHandler(EventHandler &&handler) noexcept
+    {
+        m_event_handlers.push_back(std::move(handler));
+    }
+
+    void Application::AddEventHandler(EventType type, Handler handler) noexcept
+    {
+        AddEventHandler(EventHandler {type, std::move(handler)});
+    }
+
+    void Application::SetRunning(bool run) noexcept
+    {
+        m_is_running = run;
+    }
+
+    bool Application::IsRunning() const noexcept
+    {
+        return m_is_running;
     }
 }
