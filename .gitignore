@@ -5,6 +5,8 @@
 .xmake
 .idea
 
+CMakeLists.txt
+
 ### C++ ###
 # Prerequisites
 *.d
